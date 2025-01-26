@@ -93,7 +93,7 @@ that is some values, we also have containers, which contain values
 """
 
 my_list = [5, "list", "items", ("with", "different"), type]
-# type() is a function: you could put literally everthing
+# type() is a function: you could put literally everything in a list it does not care
 
 """
 values, including lists. yes, thats powering your 2d matrix.
@@ -396,6 +396,11 @@ for number in one_to_20:
 
 # quick notice: this number variable can not be accessed outside the for loop.
 
+# actually it will be the last element actually i dont know
+# coming from literally any other language:
+# a variable made for the loop should only stay in the loop
+# why is python like this? is this a bug?
+
 """
 while.
 
@@ -434,6 +439,12 @@ while True:
     print(another_number, "is not a bad number")  # this will skip 4 and 7
 
 # wtf
+
+"""
+match case
+
+like switch case but it is match case and it doesnt have fallthroughs
+"""
 
 
 """
@@ -607,5 +618,95 @@ bungee = BungeeJumper(68.1, 0.25)
 bungee.dt = 2
 print(bungee.vt_next())
 
+
 # wow it so works
 # trailing off
+
+"""so much over here. a lot of it is boilerplate,
+only a few: namely vt_step and current_dvdt is doing all the math.
+
+yes. thats code for you. a lot of structure for idk 5 lines of actual calculation or something idfk
+"""
+
+"""
+Class. The heart of python. literally everything is a class. 
+
+you are either working with a function, which is a class,
+a data type, which is a class,
+or like an external module / package, which is (oh no) also a class.
+
+
+class in python is more lenient than java:
+
+first up: everything need not be a class:
+in java you have to declare the main class and the main function.
+in python they see statement they execute statement. no need for class.
+
+while java you can only inherit from only one base class, in python
+you can have multiple base classes, classes that double as interfaces, etc.
+
+you can also have directly editable attributes.
+No getter / setter functions. if you want you could make them, like i do, but rn you dont
+
+you also have no private attributes. i can only hope you wont touch my 
+bungee._BungeeJumper__time and mess it up.
+
+Class is yk classic OOP: you have class, you have instances of class.
+class BungeeJumper is a class, bungee is an instance.
+int is a class, and 1 is an instance.
+
+
+everywhere else they call a function function, but in a class they call them Methods.
+
+methods have this kinda thing they call dot notation.
+basically instance.method is just another function. but somethings going on:
+
+instance instead of doing nothing will be passed into methods as first argument.
+yes, not javas `this`. `this` is a set name.
+python `self` i could change it to whatever. instance will be passed to it.
+
+That is a classmethod.
+a staticmethod has no such rules.
+"""
+
+# do you know you can declare a class without even touching the word class at all? its the power of type().
+
+
+@classmethod
+def lda_set_example_arg(self, arg):
+    self.lda_example_instance_arg = arg
+
+
+" __init__ is a magic function that will run when you make a class instance"
+
+LdaExampleClass = type(
+    "LdaExampleClass",
+    (object,),
+    {
+        "__init__": lda_set_example_arg,
+        "lda_example_class_arg": 1,
+        "quadratic_builder": quadratic_builder,
+        "hello_world": hello_world,
+        "hello_to": hello_to,
+    },
+)
+
+LdaExampleClass.hello_to("lda")  # prints hello lda!
+
+
+def lda_print_example_arg(self):
+    print("instance:", self.lda_example_instance_arg)
+    print("class:", self.lda_example_class_arg)
+
+
+# objects can freely add properties
+LdaExampleClass.lda_print_example_arg = classmethod(lda_print_example_arg)
+
+lda1 = LdaExampleClass(3)  # this must fit the args of self.__init__()
+lda1.lda_print_example_arg()  # pylint: disable=no-member # ide freak out
+# this will print instance which we just passed as 3,
+# and class which is from the above which is 1.
+# Nothing was changed: i dont assign anything to anything in the functions
+# except for lda_set_example_arg
+
+# dont do this, however, as ide will freak out.
