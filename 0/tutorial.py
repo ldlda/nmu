@@ -460,3 +460,152 @@ you have some things you want to get from the model.
 
 How would this work?
 """
+
+from collections import namedtuple
+from numbers import Number
+from typing import Self
+
+
+class BungeeJumper:
+    """
+    this is also the slide but i use the numerical
+
+    v(t+dt) = v(t) + (g + cd/m * v(t)**2) * dt
+    """
+
+    BungeeTuple = namedtuple("BungeeTuple", ["t", "dt", "vt"], rename=True)
+
+    def __init__(self, mass, drag_coeff):
+        if not isinstance(mass, Number) or not isinstance(drag_coeff, Number):
+            raise ValueError("did not supply numbers")
+        if mass <= 0 or drag_coeff <= 0:
+            raise ValueError("values smaller than 0")
+
+        # doing this basically forbids all outside access to __(something).
+        # two underscores. i repeat: two underscores.
+        self.__mass = float(mass)
+        self.__drag_coeff = float(drag_coeff)
+        self.__time = 0.0
+        self.__delta_time = 1.0
+        self.__vt = 0.0
+        self.__table: list[BungeeJumper.BungeeTuple] = [self.current_bungee_tuple()]
+
+    @property
+    def mass(self):
+        "mass of the bungee person"
+        return self.__mass
+
+    @property
+    def cd(self):
+        "air drag of bungee person"
+        return self.__drag_coeff
+
+    # getter overrides property fn for getting values.
+    # you wont be using @my_attr.getter ever
+
+    @property
+    def t(self):
+        """current time
+        we will not set time, change it through delta + special reset fn,
+        """
+        return self.__time
+
+    @property
+    def dt(self):
+        "current delta, settable"
+        return self.__delta_time
+
+    @dt.setter
+    def dt(self, new_delta):
+        "setting delta time"
+        if new_delta <= 0:
+            raise ValueError("delta <= 0 which isnt what we like")
+        self.__delta_time = new_delta
+
+    @property
+    def vt(self):
+        "current vt for viewing only"
+        return self.__vt
+
+    # we do not like boilerplate code
+    def current_dvdt(self, current_vt):
+        """
+        get deriv supplied current vt
+        """
+        g = 9.80665
+        cd_m = self.cd / self.mass
+        return g - cd_m * current_vt**2
+
+    def vt_step(self, delta_t):
+        "what would be next given current systems state"
+        current_vt = self.vt
+        current_t = self.t
+        current_dvdt = self.current_dvdt(current_vt)
+        new_t = current_t + delta_t
+        new_vt = current_vt + current_dvdt * delta_t
+        return new_t, new_vt
+
+    @staticmethod
+    def bungee_tuple(t, dt, vt):
+        "static method for the format of BungeeJumper.BungeeTuple"
+        return BungeeJumper.BungeeTuple(t=t, dt=dt, vt=vt)
+
+    def current_bungee_tuple(self):
+        "class method for current BungeeJumper.BungeeTuple"
+        return BungeeJumper.bungee_tuple(self.t, self.dt, self.vt)
+
+    def vt_next(self):
+        "step"
+        self.__time, self.__vt = self.vt_step(self.dt)
+        c = self.current_bungee_tuple()
+        self.__table.append(c)
+        return c
+
+    def reset(self):
+        old = self.__table
+        self.__time = 0.0
+        self.__delta_time = 1.0
+        self.__vt = 0.0
+        self.__table = [self.current_bungee_tuple()]
+        return old
+
+    def bungee_info(self):
+        return {
+            "t": self.t,
+            "dt": self.dt,
+            "vt": self.vt,
+            "m": self.mass,
+            "cd": self.cd,
+            "table": [i._asdict() for i in self.__table],
+        }
+
+    def bungee_import(self, t=None, dt=None, vt=None, m=None, cd=None, table=None):
+        """overrides, also format from bungee_info only"""
+        if t is not None:
+            self.__time = t
+        if dt is not None:
+            self.__delta_time = dt
+        if vt is not None:
+            self.__vt = vt
+        if m is not None:
+            self.__mass = m
+        if cd is not None:
+            self.__drag_coeff = cd
+        if table is not None:
+            self.__table = [self.bungee_tuple(**i) for i in table]
+
+    @staticmethod
+    def from_bungee_table(table: list[BungeeTuple], mass, drag_coeff) -> Self:
+        last = table[-1]
+        t, dt, vt = last
+        new = BungeeJumper(mass, drag_coeff)
+        new.bungee_import(t=t, dt=dt, vt=vt, m=mass, cd=drag_coeff, table=table)
+        return new
+
+
+bungee = BungeeJumper(68.1, 0.25)
+bungee.dt = 2
+print(bungee.vt_next())
+
+# wow it so works
+# trailing off
