@@ -11,6 +11,8 @@ git init
 git add .
 git commit
 git worktree add python # branch -c python but it adds a folder
+
+git remote add origin git@localhost:lda/nmu.git # git.ldlda.com/lda/nmu.git
 ```
 
 ## advice
