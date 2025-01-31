@@ -476,6 +476,10 @@ from collections import namedtuple
 from numbers import Number
 from typing import Self
 
+# a habit that you should take is that you should never blanket import.
+# non of these import * in python, use ::* in rust, using namespace in c++, etc.
+# only import what you need. the IDE will help you.
+
 
 class BungeeJumper:
     """
@@ -517,8 +521,8 @@ class BungeeJumper:
     @property
     def t(self):
         """current time
-        we will not set time, change it through delta + special reset fn,
-        """
+
+        we will not set time, change it through delta + special reset fn,"""
         return self.__time
 
     @property
@@ -590,6 +594,7 @@ class BungeeJumper:
             "table": [i._asdict() for i in self.__table],
         }
 
+    # pylint flagged this for design choice, and i agree.
     def bungee_import(self, t=None, dt=None, vt=None, m=None, cd=None, table=None):
         """overrides, also format from bungee_info only"""
         if t is not None:
@@ -665,16 +670,16 @@ instance instead of doing nothing will be passed into methods as first argument.
 yes, not javas `this`. `this` is a set name.
 python `self` i could change it to whatever. instance will be passed to it.
 
-That is a classmethod.
+That is a method.
 a staticmethod has no such rules.
 """
 
 # do you know you can declare a class without even touching the word class at all? its the power of type().
+# however dont do this oh please
 
 
-@classmethod
-def lda_set_example_arg(self, arg):
-    self.lda_example_instance_arg = arg
+def lda_set_example_arg(inst, arg):
+    inst.lda_example_instance_arg = arg
 
 
 " __init__ is a magic function that will run when you make a class instance"
@@ -694,13 +699,18 @@ LdaExampleClass = type(
 LdaExampleClass.hello_to("lda")  # prints hello lda!
 
 
-def lda_print_example_arg(self):
-    print("instance:", self.lda_example_instance_arg)
-    print("class:", self.lda_example_class_arg)
+def lda_print_example_arg(inst):
+    print("instance:", inst.lda_example_instance_arg)
+    print("class:", inst.lda_example_class_arg)
 
+# @classmethod # class methods passes class as opposed of instance for first arg # i just knew this!
+# def cls_print_example_arg(cls):
+#     print("class:", cls.lda_example_class_arg)
+#     print("instance:", cls.lda_example_instance_arg) # uh oh
 
 # objects can freely add properties
-LdaExampleClass.lda_print_example_arg = classmethod(lda_print_example_arg)
+LdaExampleClass.lda_print_example_arg = lda_print_example_arg
+# LdaExampleClass.cls_print_example_arg = cls_print_example_arg # see note below
 
 lda1 = LdaExampleClass(3)  # this must fit the args of self.__init__()
 lda1.lda_print_example_arg()  # pylint: disable=no-member # ide freak out
@@ -708,6 +718,7 @@ lda1.lda_print_example_arg()  # pylint: disable=no-member # ide freak out
 # and class which is from the above which is 1.
 # Nothing was changed: i dont assign anything to anything in the functions
 # except for lda_set_example_arg
+# lda1.cls_print_example_arg() # crashes as cls LdaExampleClass dont have lda_example_instance_arg instance variable
 
 # dont do this, however, as ide will freak out.
 
@@ -723,6 +734,7 @@ copied_1_20 = one_to_20.copy()  # this shallow copies
 copied_1_20.append(21)
 
 assert copied_1_20 != one_to_20
+assert copied_1_20[-2:] == [20, 21]
 
 # if you have intellicode you can do ctrl + space to get that hints going.
 
@@ -731,3 +743,6 @@ ah yes intellicode.
 You can view methods easily with intellisense if using vscode, 
 and you can also docs.python.org for more
 """
+
+# here is where you should be downloading jupyter to get the Tutorial2 Going.
+# check its website. make sure you have the python, it is in PATH, and the pip exists. Or you can use poetry or miniconda. Or pipx. idfk do research.
