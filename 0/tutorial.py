@@ -703,6 +703,7 @@ def lda_print_example_arg(inst):
     print("instance:", inst.lda_example_instance_arg)
     print("class:", inst.lda_example_class_arg)
 
+
 # @classmethod # class methods passes class as opposed of instance for first arg # i just knew this!
 # def cls_print_example_arg(cls):
 #     print("class:", cls.lda_example_class_arg)
