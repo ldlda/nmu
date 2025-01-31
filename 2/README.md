@@ -10,4 +10,4 @@ also its the way your calculator find roots of functions
 
 it seems like something like pylance cant hold up against super complex gigantic modules like scipy, numpy or sympy.
 
-also then they dont type hint their functions? or they do? but whatever the fuck
+pylance dont fw jupyter notebook is what i can say
