@@ -710,3 +710,24 @@ lda1.lda_print_example_arg()  # pylint: disable=no-member # ide freak out
 # except for lda_set_example_arg
 
 # dont do this, however, as ide will freak out.
+
+
+"""so uh that was a bad example huh.
+
+turning back to list. Now you know list is a kinda a class.
+and class has methods. List also has some methods.
+"""
+
+copied_1_20 = one_to_20.copy()  # this shallow copies
+
+copied_1_20.append(21)
+
+assert copied_1_20 != one_to_20
+
+# if you have intellicode you can do ctrl + space to get that hints going.
+
+"""
+ah yes intellicode. 
+You can view methods easily with intellisense if using vscode, 
+and you can also docs.python.org for more
+"""
