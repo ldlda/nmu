@@ -685,14 +685,16 @@ def lda_set_example_arg(inst, arg):
 " __init__ is a magic function that will run when you make a class instance"
 
 LdaExampleClass = type(
-    "LdaExampleClass",
-    (object,),
+    "LdaExampleClass",  # name of class
+    (object,),  # inherit from who?
     {
-        "__init__": lda_set_example_arg,
-        "lda_example_class_arg": 1,
-        "quadratic_builder": quadratic_builder,
-        "hello_world": hello_world,
-        "hello_to": hello_to,
+        "__init__": lda_set_example_arg,  # calling LdaExampleClass().__init__() would call lda_set_example_arg
+        "lda_example_class_arg": 1,  # a class property. it sticks to a class. not any instances.
+        "quadratic_builder": staticmethod(quadratic_builder),
+        "hello_world": staticmethod(hello_world),
+        "hello_to": staticmethod(
+            hello_to
+        ),  # so inst wont be passed in as first arg if i try lda1.hello_world() (the function dont take args)
     },
 )
 
