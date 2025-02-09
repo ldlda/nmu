@@ -12,7 +12,19 @@ git add .
 git commit
 git worktree add python # branch -c python but it adds a folder
 
-git remote add origin git@localhost:lda/nmu.git # git.ldlda.com/lda/nmu.git
+git remote add origin git@localhost:lda/nmu.git 
+# git.ldlda.com/lda/nmu.git but i cant get it to work
+```
+
+## as a guest
+
+idfk what you do after clone: on github you should be doing issues and idk how pr would work, because gh is a push mirror.  
+on [git.ldlda.com](https://git.ldlda.com) well it is invite only
+
+```sh
+git clone git@localhost:lda/nmu.git
+cd nmu
+git branch origin/python # next up is your own
 ```
 
 ## advice
