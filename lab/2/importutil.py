@@ -22,3 +22,6 @@ def why_so_ass(file: Path | str, name: str, namesys: str = None):
     mod = importlib.util.module_from_spec(spec)
     modules[namesys] = mod  # !!
     spec.loader.exec_module(mod)
+    ## this line right here
+    ## why do i need it to exec EVER WHY no i dont WHYYYYY
+    # if i do from tutorial import bungee_jumper in tutorial2.ipynb it dont do that # oh it does
